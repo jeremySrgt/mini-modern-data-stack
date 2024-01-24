@@ -1,0 +1,4 @@
+name: mini-data-stack
+runtime:
+  name: python
+description: A complete mini data stack to run in production

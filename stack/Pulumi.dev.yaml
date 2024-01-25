@@ -1,2 +1,6 @@
 config:
   aws:region: eu-west-3
+  mini-data-stack:dwh_master_password:
+    secure: AAABAK9QhUP62arQ/nKsSM/w4RpjqgysX1OP54ImJHUmOdseqo4ttRO2VWhpKc28uFOd
+  mini-data-stack:dwh_master_user:
+    secure: AAABAJwRT/6iaJbnEYK5TxiIDBM0g5DLuHNT69P+iQ/oQrLiBkIvgcSZgNwsBnQ=

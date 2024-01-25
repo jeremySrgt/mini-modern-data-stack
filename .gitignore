@@ -1,2 +1,4 @@
 venv_mini_data_stack
 .python-version
+stack/__pychache__/
+stack/__pycache__/__main__.cpython-311.pyc

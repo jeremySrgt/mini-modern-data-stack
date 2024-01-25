@@ -2,49 +2,15 @@ import pulumi
 import pulumi_aws as aws
 
 from instance import ec2_instance
+from security_groups import (
+    sg_allow_443_outbound_to_cidr_block,
+    sg_allow_443_inbound_from_referenced_sg,
+)
+from vpc_endpoints import ssm_vpc_endpoints
+from network import data_vpc, private_subnet, warehouse_subnet_group
 
 cfg = pulumi.Config()
 
-data_vpc = aws.ec2.Vpc(
-    "data_vpc",
-    cidr_block="10.0.0.0/16",
-    enable_dns_hostnames=True,
-    enable_dns_support=True,
-    tags={"Name": "mini-data-stack", "env": "dev"},
-)
-
-public_subnet = aws.ec2.Subnet(
-    "public_subnet",
-    vpc_id=data_vpc.id,
-    availability_zone="eu-west-3a",
-    cidr_block="10.0.1.0/24",
-    map_public_ip_on_launch=True,
-    tags={"Name": "data-public-subnet", "env": "dev"},
-)
-
-private_subnet = aws.ec2.Subnet(
-    "private_subnet",
-    vpc_id=data_vpc.id,
-    availability_zone="eu-west-3a",
-    cidr_block="10.0.2.0/24",
-    map_public_ip_on_launch=False,
-    tags={"Name": "data-private-subnet", "env": "dev"},
-)
-
-private_subnet_2 = aws.ec2.Subnet(
-    "private_subnet_2",
-    vpc_id=data_vpc.id,
-    availability_zone="eu-west-3b",
-    cidr_block="10.0.3.0/24",
-    map_public_ip_on_launch=False,
-    tags={"Name": "data-private-subnet-2", "env": "dev"},
-)
-
-warehouse_subnet_group = aws.rds.SubnetGroup(
-    "data_warehouse_subnet_group",
-    subnet_ids=[private_subnet.id, private_subnet_2.id],
-    tags={"Name": "data-warehouse-subnet-group", "env": "env"},
-)
 
 data_warehouse_sg = aws.ec2.SecurityGroup(
     "data_warehouse_sg",
@@ -89,81 +55,29 @@ data_warehouse = aws.rds.Instance(
     tags={"Name": "data-warehouse-rds", "env": "dev"},
 )
 
-
-ec2_sg = aws.ec2.SecurityGroup(
-    "ec2_sg",
-    description="Allow outbound traffic to vpc endpoint net work interface",
+sg_ssm = sg_allow_443_outbound_to_cidr_block(
+    resource_name="sg_allow_443_outbound_to_private_subnet",
     vpc_id=data_vpc.id,
-    tags={"Name": "ec2-sg", "env": "dev"},
-)
-
-ec2_sg_egress_rule = aws.vpc.SecurityGroupEgressRule(
-    "ec2_sg_egress_rule",
-    security_group_id=ec2_sg.id,
-    ip_protocol="tcp",
-    cidr_ipv4=private_subnet.cidr_block,
-    from_port=443,
-    to_port=443,
+    authorized_cidr_block=private_subnet.cidr_block,
 )
 
 
-vpc_endpoint_sg = aws.ec2.SecurityGroup(
-    "vpc_endpoint_sg",
-    description="Allow inbound traffic from EC2 instance with attached SG",
+vpc_endpoint_sg = sg_allow_443_inbound_from_referenced_sg(
+    resource_name="sg_allow_443_inbound_from_referenced_sg",
     vpc_id=data_vpc.id,
-    tags={"Name": "vpc-endpoint-sg", "env": "dev"},
-)
-
-vpc_endpoint_sg_ingress_rule = aws.vpc.SecurityGroupIngressRule(
-    "vpc_endpoint_sg_ingress_rule",
-    security_group_id=vpc_endpoint_sg.id,
-    ip_protocol="tcp",
-    referenced_security_group_id=ec2_sg.id,
-    from_port=443,
-    to_port=443,
+    reference_sg_id=sg_ssm.id,
 )
 
 
-vpc_endpoint_ssm = aws.ec2.VpcEndpoint(
-    "vpc_endpoint_ssm",
-    service_name="com.amazonaws.eu-west-3.ssm",
-    ip_address_type="ipv4",
-    private_dns_enabled=True,
-    vpc_id=data_vpc.id,
-    auto_accept=True,
-    security_group_ids=[vpc_endpoint_sg.id],
-    subnet_ids=[private_subnet.id],
-    vpc_endpoint_type="Interface",
+vps_endpoints = ssm_vpc_endpoints(
+    vpc_id=data_vpc.id, sg_ids=[vpc_endpoint_sg.id], subnet_ids=[private_subnet.id]
 )
 
-vpc_endpoint_ssm_messages = aws.ec2.VpcEndpoint(
-    "vpc_endpoint_ssm_messages",
-    service_name="com.amazonaws.eu-west-3.ssmmessages",
-    ip_address_type="ipv4",
-    private_dns_enabled=True,
-    vpc_id=data_vpc.id,
-    auto_accept=True,
-    security_group_ids=[vpc_endpoint_sg.id],
-    subnet_ids=[private_subnet.id],
-    vpc_endpoint_type="Interface",
-)
-
-vpc_endpoint_ec2_messages = aws.ec2.VpcEndpoint(
-    "vpc_endpoint_ec2_messages",
-    service_name="com.amazonaws.eu-west-3.ec2messages",
-    ip_address_type="ipv4",
-    private_dns_enabled=True,
-    vpc_id=data_vpc.id,
-    auto_accept=True,
-    security_group_ids=[vpc_endpoint_sg.id],
-    subnet_ids=[private_subnet.id],
-    vpc_endpoint_type="Interface",
-)
 
 test_instance = ec2_instance(
     resource_name="test-instance",
     instance_type="t3.micro",
     az="eu-west-3a",
     subnet_id=private_subnet.id,
-    security_group_ids=[ec2_sg.id],
+    security_group_ids=[sg_ssm.id],
 )

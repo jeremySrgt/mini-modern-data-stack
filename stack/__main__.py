@@ -1,6 +1,7 @@
 import pulumi
 import pulumi_aws as aws
-import json
+
+from instance import ec2_instance
 
 cfg = pulumi.Config()
 
@@ -89,40 +90,6 @@ data_warehouse = aws.rds.Instance(
 )
 
 
-def ec2_role_instance_profile() -> aws.iam.InstanceProfile:
-    ec2_instance_role = aws.iam.Role(
-        "ec2--instance-role",
-        name="ec2-instance-role",
-        assume_role_policy=json.dumps(
-            {
-                "Version": "2012-10-17",
-                "Statement": [
-                    {
-                        "Action": "sts:AssumeRole",
-                        "Principal": {"Service": "ec2.amazonaws.com"},
-                        "Effect": "Allow",
-                        "Sid": "",
-                    }
-                ],
-            }
-        ),
-    )
-
-    aws.iam.RolePolicyAttachment(
-        "ec2-instance-role-policy-attachment-ssm-role",
-        role=ec2_instance_role.name,
-        policy_arn="arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore",
-    )
-
-    ec2_instance_profile = aws.iam.InstanceProfile(
-        "ec2-instance-profile",
-        name="ec2-instance-profile",
-        role=ec2_instance_role.name,
-    )
-
-    return ec2_instance_profile
-
-
 ec2_sg = aws.ec2.SecurityGroup(
     "ec2_sg",
     description="Allow outbound traffic to vpc endpoint net work interface",
@@ -193,28 +160,10 @@ vpc_endpoint_ec2_messages = aws.ec2.VpcEndpoint(
     vpc_endpoint_type="Interface",
 )
 
-
-def ec2_instance() -> aws.ec2.Instance:
-    instance_profile = ec2_role_instance_profile()
-    ec2_ecs_instance = aws.ec2.Instance(
-        "ec2-instance",
-        instance_type="t3.micro",
-        ami="ami-0cb7af6ec2ad3c332",
-        iam_instance_profile=instance_profile.name,
-        availability_zone="eu-west-3a",
-        subnet_id=private_subnet.id,
-        vpc_security_group_ids=[ec2_sg.id],
-        root_block_device=aws.ec2.InstanceRootBlockDeviceArgs(
-            delete_on_termination=True,
-            encrypted=True,
-            volume_size=20,
-            volume_type="gp3",
-            tags={"Name": "ec2-attached-instance-volume", "env": "dev"},
-        ),
-        tags={"Name": "ec2-attached-instance", "env": "dev"},
-    )
-
-    return ec2_ecs_instance
-
-
-ec2_instance()
+test_instance = ec2_instance(
+    resource_name="test-instance",
+    instance_type="t3.micro",
+    az="eu-west-3a",
+    subnet_id=private_subnet.id,
+    security_group_ids=[ec2_sg.id],
+)

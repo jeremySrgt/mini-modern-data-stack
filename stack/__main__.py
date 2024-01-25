@@ -8,7 +8,7 @@ data_vpc = aws.ec2.Vpc(
     "data_vpc",
     cidr_block="10.0.0.0/16",
     enable_dns_hostnames=True,
-    enable_dns_support = True,
+    enable_dns_support=True,
     tags={"Name": "mini-data-stack", "env": "dev"},
 )
 
@@ -133,16 +133,12 @@ ec2_sg = aws.ec2.SecurityGroup(
 ec2_sg_egress_rule = aws.vpc.SecurityGroupEgressRule(
     "ec2_sg_egress_rule",
     security_group_id=ec2_sg.id,
-    ip_protocol="-1",
+    ip_protocol="tcp",
     cidr_ipv4=private_subnet.cidr_block,
+    from_port=443,
+    to_port=443,
 )
 
-ec2_sg_ingress_rule = aws.vpc.SecurityGroupIngressRule(
-    "ec2_sg_ingress_rule",
-    security_group_id=ec2_sg.id,
-    ip_protocol="-1",
-    cidr_ipv4="0.0.0.0/0",
-)
 
 vpc_endpoint_sg = aws.ec2.SecurityGroup(
     "vpc_endpoint_sg",
@@ -155,18 +151,11 @@ vpc_endpoint_sg_ingress_rule = aws.vpc.SecurityGroupIngressRule(
     "vpc_endpoint_sg_ingress_rule",
     security_group_id=vpc_endpoint_sg.id,
     ip_protocol="tcp",
-    cidr_ipv4=private_subnet.cidr_block,
-    # referenced_security_group_id=ec2_sg.id,
+    referenced_security_group_id=ec2_sg.id,
     from_port=443,
     to_port=443,
 )
 
-vpc_endpoint_sg_egress_rule = aws.vpc.SecurityGroupEgressRule(
-    "vpc_endpoint_sg_Egress_rule",
-    security_group_id=vpc_endpoint_sg.id,
-    ip_protocol="-1",
-    cidr_ipv4="0.0.0.0/0",
-)
 
 vpc_endpoint_ssm = aws.ec2.VpcEndpoint(
     "vpc_endpoint_ssm",

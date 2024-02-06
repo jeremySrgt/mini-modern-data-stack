@@ -1,0 +1,18 @@
+- hosts: group_metabase_instance
+  gather_facts: false
+  become: true
+  roles:
+    - roles/docker
+  tasks:
+    - name: Start metabase on docker
+      become: false
+      community.docker.docker_container:
+        name: 'metabase'
+        image: 'metabase/metabase:v0.47.9'
+        env:
+          MB_PASSWORD_COMPLEXITY: "strong"
+          MB_APPLICATION_DB_MAX_CONNECTION_POOL_SIZE: "80"
+          MAX_SESSION_AGE: "10080"
+        ports:
+          - "3000:3000"
+        state: started

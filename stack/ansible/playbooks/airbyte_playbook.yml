@@ -1,0 +1,49 @@
+- hosts: group_airbyte_instance
+  gather_facts: false
+  become: true
+  roles:
+    - roles/docker
+  tasks:
+    - name: Install git
+      yum:
+        name: 'git'
+        state: present
+    - name: Install Docker Compose Module for Python
+      pip:
+        name: docker-compose==1.29.2
+    - name: Create airbyte folder
+      ansible.builtin.file:
+        path: airbyte
+        state: directory
+        mode: 'u+rwx'
+    - name: Get airbyte
+      git:
+        repo: 'https://github.com/airbytehq/airbyte.git'
+        dest: airbyte
+        version: v0.50.47
+      register: airbyte_version
+    - name: Download necessary Airbyte file
+      ansible.builtin.shell: ./run-ab-platform.sh --refresh
+      args:
+        chdir: airbyte/
+      when: airbyte_version.changed
+    - name: Start Airbyte
+      environment:
+        BASIC_AUTH_USERNAME: "airbyte"
+        BASIC_AUTH_PASSWORD: "password"
+        SYNC_JOB_RETRIES_COMPLETE_FAILURES_MAX_SUCCESSIVE: 1
+        SYNC_JOB_RETRIES_PARTIAL_FAILURES_MAX_SUCCESSIVE: 1
+        SYNC_JOB_MAX_TIMEOUT_DAYS: 1
+        MAX_SPEC_WORKERS: 2
+        MAX_CHECK_WORKERS: 2
+        MAX_SYNC_WORKERS: 2
+        MAX_DISCOVER_WORKERS: 2
+      community.docker.docker_compose:
+        project_src: airbyte
+        recreate: always
+        state: present
+      when: airbyte_version.changed
+    - name: Prune old images version
+      community.docker.docker_prune:
+        images: true
+      when: airbyte_version.changed

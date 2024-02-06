@@ -1,0 +1,18 @@
+- name: Install docker
+  yum:
+    name: 'docker-20.10.17'
+    state: present
+- name: Service docker
+  service:
+    name: docker
+    state: started
+    enabled: yes
+- name: Add docker ec2 user
+  user:
+    name: 'ec2-user'
+    append: yes
+    groups: docker
+- name: Install Docker Module for Python
+  become_user: ec2-user
+  pip:
+    name: docker==6.0.1

@@ -1,8 +1,24 @@
 import pulumi
 import pulumi_aws as aws
-from network import warehouse_subnet_group
+from network import warehouse_subnet_group, data_vpc
 
 cfg = pulumi.Config()
+
+data_warehouse_sg = aws.ec2.SecurityGroup(
+    "data_warehouse_sg",
+    description="Allow inbound traffic only if it is coming from instance inside our vpc",
+    vpc_id=data_vpc.id,
+    tags={"Name": "data-warehouse-sg", "env": "dev"},
+)
+
+data_warehouse_sg_ingress_rule = aws.vpc.SecurityGroupIngressRule(
+    "data_warehouse_sg_ingress_rule",
+    security_group_id=data_warehouse_sg.id,
+    from_port=5432,
+    to_port=5432,
+    ip_protocol="tcp",
+    cidr_ipv4="10.0.2.0/24",  # Change this once we have ou instance attached SG as ingress source
+)
 
 data_warehouse = aws.rds.Instance(
     "data_warehouse",

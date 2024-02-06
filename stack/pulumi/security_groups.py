@@ -1,5 +1,5 @@
 import pulumi_aws as aws
-
+from network import data_vpc, private_subnet
 
 def sg_allow_443_outbound_to_cidr_block(
     resource_name, vpc_id: str, authorized_cidr_block: str
@@ -43,3 +43,10 @@ def sg_allow_443_inbound_from_referenced_sg(
     )
 
     return sg
+
+
+sg_ssm = sg_allow_443_outbound_to_cidr_block(
+    resource_name="sg_allow_443_outbound_to_private_subnet",
+    vpc_id=data_vpc.id,
+    authorized_cidr_block=private_subnet.cidr_block,
+)

@@ -3,7 +3,7 @@ import pulumi_aws as aws
 
 def ec2_instance_profile() -> aws.iam.InstanceProfile:
     ec2_instance_role = aws.iam.Role(
-        "ec2--instance-role",
+        "ec2-instance-role",
         name="ec2-instance-role",
         assume_role_policy=json.dumps(
             {

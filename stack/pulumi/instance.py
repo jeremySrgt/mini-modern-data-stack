@@ -6,10 +6,11 @@ from instance_profile import instance_profile
 def ec2_instance(
     resource_name: str,
     subnet_id: str,
-    security_group_ids: List[str],
     instance_type: str,
     az: str,
+    security_group_ids: List[str] = [],
 ) -> aws.ec2.Instance:
+
     ec2_ecs_instance = aws.ec2.Instance(
         resource_name,
         instance_type=instance_type,

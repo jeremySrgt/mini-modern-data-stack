@@ -20,7 +20,7 @@ def ec2_instance(
         subnet_id=subnet_id,
         vpc_security_group_ids=security_group_ids,
         root_block_device=aws.ec2.InstanceRootBlockDeviceArgs(
-            delete_on_termination=True,
+            delete_on_termination=False, # Just in case we don't have a proper db for Metabase and Airbyte data
             encrypted=True,
             volume_size=20,
             volume_type="gp3",

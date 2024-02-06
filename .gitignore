@@ -2,3 +2,4 @@ venv_mini_data_stack
 .python-version
 stack/__pychache__/**
 stack/__pycache__
+stack/pulumi/__pycache__

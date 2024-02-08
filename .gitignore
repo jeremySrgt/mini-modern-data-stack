@@ -3,3 +3,5 @@ venv_mini_data_stack
 stack/__pychache__/**
 stack/__pycache__
 stack/pulumi/__pycache__
+*-keypair
+*-keypair.pub

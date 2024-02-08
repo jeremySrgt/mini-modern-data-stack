@@ -9,6 +9,7 @@
         name: 'git'
         state: present
     - name: Install Docker Compose Module for Python
+      become_user: ec2-user
       pip:
         name: docker-compose==1.29.2
     - name: Create airbyte folder
@@ -29,8 +30,8 @@
       when: airbyte_version.changed
     - name: Start Airbyte
       environment:
-        BASIC_AUTH_USERNAME: "airbyte"
-        BASIC_AUTH_PASSWORD: "password"
+        BASIC_AUTH_USERNAME: "airbyte" # Remove this as we are in a private subnet not accessible from the internet
+        BASIC_AUTH_PASSWORD: "password" # same here
         SYNC_JOB_RETRIES_COMPLETE_FAILURES_MAX_SUCCESSIVE: 1
         SYNC_JOB_RETRIES_PARTIAL_FAILURES_MAX_SUCCESSIVE: 1
         SYNC_JOB_MAX_TIMEOUT_DAYS: 1

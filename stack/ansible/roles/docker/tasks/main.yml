@@ -1,6 +1,6 @@
 - name: Install docker
   yum:
-    name: 'docker-20.10.17'
+    name: "docker-20.10.17"
     state: present
 - name: Service docker
   service:
@@ -9,10 +9,15 @@
     enabled: yes
 - name: Add docker ec2 user
   user:
-    name: 'ec2-user'
+    name: "ssm-user"
     append: yes
     groups: docker
+- name: Install and upgrade pip
+  pip:
+    name: pip
+    extra_args: --upgrade
+    executable: pip
 - name: Install Docker Module for Python
-  become_user: ec2-user
+  # become_user: ec2-user
   pip:
     name: docker==6.0.1

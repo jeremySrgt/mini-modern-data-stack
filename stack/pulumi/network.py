@@ -40,3 +40,52 @@ warehouse_subnet_group = aws.rds.SubnetGroup(
     subnet_ids=[private_subnet.id, private_subnet_2.id],
     tags={"Name": "data-warehouse-subnet-group", "env": "env"},
 )
+
+internet_gateway = aws.ec2.InternetGateway(
+    "internet_gateway",
+    vpc_id=data_vpc.id,
+    tags={"Name": "internet_gateway", "env": "dev"},
+)
+
+nat_gateway_eip = aws.ec2.Eip(
+    "nat_gateway_eip", tags={"Name": "nat_gateway_eip", "env": "dev"}
+)
+
+nat_gateway = aws.ec2.NatGateway(
+    "nat_gateway",
+    allocation_id=nat_gateway_eip.id,
+    subnet_id=public_subnet.id,
+    tags={"Name": "data_nat_gateway", "env": "dev"},
+)
+
+private_subnet_route_table = aws.ec2.RouteTable(
+    "private_subnet_route_table",
+    vpc_id=data_vpc.id,
+    routes=[
+        aws.ec2.RouteTableRouteArgs(
+            cidr_block="0.0.0.0/0", nat_gateway_id=nat_gateway.id
+        )
+    ],
+)
+
+private_subnet_rt_association = aws.ec2.RouteTableAssociation(
+    "private_subnet_rt_association",
+    subnet_id=private_subnet.id,
+    route_table_id=private_subnet_route_table.id,
+)
+
+public_subnet_route_table = aws.ec2.RouteTable(
+    "public_subnet_route_table",
+    vpc_id=data_vpc.id,
+    routes=[
+        aws.ec2.RouteTableRouteArgs(
+            cidr_block="0.0.0.0/0", gateway_id=internet_gateway.id
+        )
+    ],
+)
+
+public_subnet_rt_association = aws.ec2.RouteTableAssociation(
+    "public_subnet_rt_association",
+    subnet_id=public_subnet.id,
+    route_table_id=public_subnet_route_table.id,
+)

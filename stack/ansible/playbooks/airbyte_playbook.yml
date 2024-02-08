@@ -10,8 +10,8 @@
         state: present
     - name: Install Docker Compose Module for Python
       become_user: ec2-user
-      pip:
-        name: docker-compose==1.29.2
+      ansible.builtin.pip:
+        name: docker-compose
     - name: Create airbyte folder
       ansible.builtin.file:
         path: airbyte
@@ -20,6 +20,7 @@
     - name: Get airbyte
       git:
         repo: 'https://github.com/airbytehq/airbyte.git'
+        depth: 1
         dest: airbyte
         version: v0.50.47
       register: airbyte_version
@@ -27,11 +28,11 @@
       ansible.builtin.shell: ./run-ab-platform.sh --refresh
       args:
         chdir: airbyte/
-      when: airbyte_version.changed
     - name: Start Airbyte
+      become_user: ec2-user
       environment:
-        BASIC_AUTH_USERNAME: "airbyte" # Remove this as we are in a private subnet not accessible from the internet
-        BASIC_AUTH_PASSWORD: "password" # same here
+        BASIC_AUTH_USERNAME: ""
+        BASIC_AUTH_PASSWORD: ""
         SYNC_JOB_RETRIES_COMPLETE_FAILURES_MAX_SUCCESSIVE: 1
         SYNC_JOB_RETRIES_PARTIAL_FAILURES_MAX_SUCCESSIVE: 1
         SYNC_JOB_MAX_TIMEOUT_DAYS: 1
@@ -43,8 +44,6 @@
         project_src: airbyte
         recreate: always
         state: present
-      when: airbyte_version.changed
     - name: Prune old images version
       community.docker.docker_prune:
         images: true
-      when: airbyte_version.changed

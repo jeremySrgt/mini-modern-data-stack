@@ -4,7 +4,10 @@ import network
 import security_groups
 import vpc_endpoints
 import data_warehouse
+import ecr
+import ecs_cluster
 import pulumi_aws as aws
+from scheduled_job import create_scheduled_job
 
 cfg = pulumi.Config()
 
@@ -37,3 +40,10 @@ airbyte_instance = instance.ec2_instance(
     ],
     keypair_id=data_instance_keypair.id,
 )
+
+create_scheduled_job(
+    name="hello_jobs",
+    file_name="hello_jobs.py",
+    schedule="cron(30 6 * * ? *)",  # Every day at 6.30 AM UTC
+)
+

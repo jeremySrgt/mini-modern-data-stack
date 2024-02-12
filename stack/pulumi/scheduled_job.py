@@ -7,7 +7,7 @@ from typing import Tuple
 from ecs_cluster import ecs_task_role, cloudwatch_role, data_ecs_cluster, cloudwatch_ecs_log_group
 from network import private_subnet
 from security_groups import sg_allow_outbound_to_anywhere
-from ecr import data_ecr
+from ecr import data_jobs_image
 
 
 config = pulumi.Config()
@@ -20,12 +20,12 @@ def create_ecs_task_definition(
 ) -> aws.ecs.TaskDefinition:
     task_definition = aws.ecs.TaskDefinition(
         f"{name}",
-        container_definitions=pulumi.Output.all(data_ecr.repository_url, cloudwatch_ecs_log_group.name).apply(
+        container_definitions=pulumi.Output.all(data_jobs_image.image_uri, cloudwatch_ecs_log_group.name).apply(
             lambda args: json.dumps(
                 [
                     {
                         "name": f"{name}",
-                        "image": f"{args[0]}:latest",
+                        "image": f"{args[0]}",
                         "essential": True,
                         "command": ["python", f"jobs/{file_name}"],
                         "environment": [

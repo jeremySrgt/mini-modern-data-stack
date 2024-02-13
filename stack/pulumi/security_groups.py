@@ -1,5 +1,6 @@
 import pulumi_aws as aws
-from network import data_vpc, private_subnet
+from network.vpc import data_vpc
+from network.private_subnets import private_subnet
 
 
 def sg_allow_443_outbound_to_cidr_block(

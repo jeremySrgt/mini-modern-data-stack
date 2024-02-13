@@ -2,7 +2,8 @@ from typing import List
 import pulumi_aws as aws
 
 from security_groups import sg_allow_443_inbound_from_referenced_sg, sg_ssm
-from network import data_vpc, private_subnet
+from network.vpc import data_vpc
+from network.private_subnets import private_subnet
 
 
 def ssm_vpc_endpoints(

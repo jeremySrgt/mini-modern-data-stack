@@ -1,9 +1,7 @@
 from typing import List
 import pulumi_aws as aws
-import pulumi
 from instance_profile import instance_profile
 
-cfg = pulumi.Config()
 
 
 def ec2_instance(

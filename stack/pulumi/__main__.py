@@ -1,6 +1,5 @@
 import pulumi
 import instance
-import network
 import security_groups
 import vpc_endpoints
 import data_warehouse
@@ -8,6 +7,7 @@ import ecr
 import ecs_cluster
 import pulumi_aws as aws
 from scheduled_job import create_scheduled_job
+from network.private_subnets import private_subnet
 
 cfg = pulumi.Config()
 
@@ -21,7 +21,7 @@ metabase_instance = instance.ec2_instance(
     resource_name="metabase_instance",
     instance_type=cfg.require("metabase_instance_type"),
     az="eu-west-3a",
-    subnet_id=network.private_subnet.id,
+    subnet_id=private_subnet.id,
     security_group_ids=[
         security_groups.sg_ssm.id,
         security_groups.sg_allow_outbound_to_anywhere,
@@ -33,7 +33,7 @@ airbyte_instance = instance.ec2_instance(
     resource_name="airbyte_instance",
     instance_type=cfg.require("airbyte_instance_type"),
     az="eu-west-3a",
-    subnet_id=network.private_subnet.id,
+    subnet_id=private_subnet.id,
     security_group_ids=[
         security_groups.sg_ssm.id,
         security_groups.sg_allow_outbound_to_anywhere,

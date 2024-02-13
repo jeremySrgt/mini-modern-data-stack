@@ -5,3 +5,4 @@ stack/__pycache__
 stack/pulumi/__pycache__
 *-keypair
 *-keypair.pub
+stack/pulumi/network/__pycache__

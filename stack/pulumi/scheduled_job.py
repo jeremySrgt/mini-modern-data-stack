@@ -5,14 +5,10 @@ import pulumi_aws as aws
 
 from typing import Tuple
 from ecs_cluster import ecs_task_role, cloudwatch_role, data_ecs_cluster, cloudwatch_ecs_log_group
-from network import private_subnet
+from network.private_subnets import private_subnet
 from security_groups import sg_allow_outbound_to_anywhere
 from ecr import data_jobs_image
 
-
-config = pulumi.Config()
-ACCOUNT_ID = config.require("account_id")
-AWS_REGION = config.require("aws_region")
 
 
 def create_ecs_task_definition(

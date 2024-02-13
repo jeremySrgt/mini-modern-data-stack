@@ -1,6 +1,7 @@
 import pulumi
 import pulumi_aws as aws
-from network import warehouse_subnet_group, data_vpc
+from network.subnet_groups import warehouse_subnet_group
+from network.vpc import data_vpc
 
 cfg = pulumi.Config()
 

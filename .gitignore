@@ -6,3 +6,4 @@ stack/pulumi/__pycache__
 *-keypair
 *-keypair.pub
 stack/pulumi/network/__pycache__
+stack/pulumi/instance/__pycache__

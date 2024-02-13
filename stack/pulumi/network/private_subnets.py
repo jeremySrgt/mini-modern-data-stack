@@ -20,6 +20,7 @@ private_subnet_route_table = aws.ec2.RouteTable(
             cidr_block="0.0.0.0/0", nat_gateway_id=nat_gateway.id
         )
     ],
+    tags={"Name": f"{ENV}-private-subnet-rt", "env": ENV},
 )
 
 private_subnet_rt_association = aws.ec2.RouteTableAssociation(

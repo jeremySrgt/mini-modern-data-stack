@@ -19,6 +19,7 @@ public_subnet_route_table = aws.ec2.RouteTable(
             cidr_block="0.0.0.0/0", gateway_id=internet_gateway.id
         )
     ],
+    tags={"Name": f"{ENV}-public-subnet-rt", "env": ENV},
 )
 
 public_subnet_rt_association = aws.ec2.RouteTableAssociation(

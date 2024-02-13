@@ -1,6 +1,7 @@
 import json
 import pulumi_aws as aws
 import pulumi_awsx as awsx
+from jobs.config import ENV
 
 data_ecr = aws.ecr.Repository(
     "data_job_image_repository",
@@ -8,12 +9,12 @@ data_ecr = aws.ecr.Repository(
     image_scanning_configuration=aws.ecr.RepositoryImageScanningConfigurationArgs(
         scan_on_push=True,
     ),
-    image_tag_mutability="MUTABLE",  # Should be immutable but for simplicity we will stick to mutable
+    image_tag_mutability="IMMUTABLE",
     force_delete=True,
     encryption_configurations=[
         aws.ecr.RepositoryEncryptionConfigurationArgs(encryption_type="KMS")
     ],
-    tags={"Name": "data_jobs", "env": "dev"},
+    tags={"Name": f"{ENV}-data-jobs-ecr", "env": ENV},
 )
 
 aws.ecr.LifecyclePolicy(

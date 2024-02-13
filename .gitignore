@@ -7,3 +7,6 @@ stack/pulumi/__pycache__
 *-keypair.pub
 stack/pulumi/network/__pycache__
 stack/pulumi/instance/__pycache__
+stack/pulumi/ecs/__pycache__
+stack/pulumi/jobs/__pycache__
+stack/pulumi/warehouse/__pycache__

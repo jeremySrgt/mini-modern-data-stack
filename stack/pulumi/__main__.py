@@ -1,9 +1,8 @@
-import pulumi
-import data_warehouse
-import ecr
-import ecs_cluster
+import warehouse.data_warehouse as data_warehouse
+import jobs.ecr as ecr
+import jobs.ecs_cluster as ecs_cluster
 import network.vpc_endpoints
-from scheduled_job import create_scheduled_job
+from jobs.scheduled_job import create_scheduled_job
 from network.private_subnets import private_subnet
 from instance.instance import ec2_instance
 from config import METABASE_INSTANCE_TYPE, AIRBYTE_INSTANCE_TYPE

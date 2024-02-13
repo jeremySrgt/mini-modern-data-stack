@@ -1,6 +1,6 @@
 import pulumi_aws as aws
 from network.private_subnets import private_subnet, private_subnet_2
-from network.config import ENV
+from warehouse.config import ENV
 
 warehouse_subnet_group = aws.rds.SubnetGroup(
     "data_warehouse_subnet_group",

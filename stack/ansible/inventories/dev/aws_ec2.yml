@@ -1,7 +1,7 @@
 plugin: aws_ec2
 aws_profile: "{{ lookup('env', 'AWS_PROFILE') | default('default', true) }}"
 regions:
-  - eu-west-3
+  - "{{ lookup('env', 'AWS_REGION') | default('eu-west-3', true) }}"
 filters:
   tag:Name:
     - metabase_instance

@@ -1,3 +1,4 @@
+import pulumi
 import warehouse.data_warehouse as data_warehouse
 import jobs.ecr as ecr
 import jobs.ecs_cluster as ecs_cluster
@@ -27,3 +28,7 @@ create_scheduled_job(
     file_name="hello_jobs.py",
     schedule="cron(30 6 * * ? *)",  # Every day at 6.30 AM UTC
 )
+
+
+pulumi.export("Metabase instance ID", metabase_instance.id)
+pulumi.export("Airbyte instance ID", airbyte_instance.id)

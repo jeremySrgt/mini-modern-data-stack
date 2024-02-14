@@ -4,6 +4,7 @@ from instance.security_groups import (
     allow_443_outbound_to_private_subnet_cidr,
     allow_outbound_to_anywhere,
 )
+from network.vpc import internet_gateway
 from instance.config import ENV, PUBLIC_KEY_PATH
 
 

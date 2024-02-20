@@ -145,7 +145,7 @@ To start a port forwarding session :
 aws ssm start-session --target <airbyte_instance_id> --document-name AWS-StartPortForwardingSession --parameters '{"portNumber":["8000"],"localPortNumber":["8000"]}'
 ```
 **Remember to correctly install and setup the aws ssm plugin in order to connect to your instances and use port
-forwarding capabilities. it basically means adding the following lines to your ~/.ssh/config**
+forwarding capabilities. It basically means adding the following lines to your ~/.ssh/config**
 ```
 host i-* mi-*
     ProxyCommand sh -c "aws ssm start-session --target %h --document-name AWS-StartSSHSession --parameters 'portNumber=%p'"`
@@ -183,7 +183,7 @@ if you destroy the Pulumi stack. Delete them from the console if your destroy th
 It is recommended to set a proper database for Airbyte and Metabase to store their configuration and data.
 You can learn more on how to do for Metabase 
 [here](https://www.metabase.com/docs/latest/installation-and-operation/configuring-application-database)
-And for Airbyte [here](https://docs.airbyte.com/operator-guides/configuring-airbyte-db)
+and for Airbyte [here](https://docs.airbyte.com/operator-guides/configuring-airbyte-db)
 
 ## Enhancements
 Here is a list of enhancement to be made, either to follow engineering best practices or to make the stack more

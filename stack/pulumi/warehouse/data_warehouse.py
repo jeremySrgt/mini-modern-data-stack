@@ -1,6 +1,7 @@
 import pulumi_aws as aws
 from warehouse.subnet_groups import warehouse_subnet_group
 from warehouse.security_groups import allow_5432_inbound_from_private_subnet
+from network.private_subnets import primary_az
 from warehouse.config import (
     ENV,
     DATA_WAREHOUSE_MASTER_USER,
@@ -15,7 +16,7 @@ data_warehouse = aws.rds.Instance(
     allocated_storage=20,
     allow_major_version_upgrade=False,
     auto_minor_version_upgrade=True,
-    availability_zone="eu-west-3a",
+    availability_zone=primary_az,
     backup_retention_period=1,
     backup_window="23:00-23:30",
     db_name=WAREHOUSE_DB_NAME,

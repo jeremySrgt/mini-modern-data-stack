@@ -42,7 +42,7 @@ def ec2_instance(
             volume_type="gp3",
             tags={"Name": f"{ENV}-{resource_name}-volume", "env": ENV},
         ),
-        tags={"Name": f"{ENV}-{resource_name}", "env": ENV},
+        tags={"Name": f"{resource_name}", "env": ENV},
     )
 
     return instance

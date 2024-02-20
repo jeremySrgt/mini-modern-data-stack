@@ -4,21 +4,21 @@ import jobs.ecr as ecr
 import jobs.ecs_cluster as ecs_cluster
 import network.vpc_endpoints
 from jobs.scheduled_job import create_scheduled_job
-from network.private_subnets import private_subnet
+from network.private_subnets import private_subnet, primary_az
 from instance.instance import ec2_instance
 from config import METABASE_INSTANCE_TYPE, AIRBYTE_INSTANCE_TYPE
 
 metabase_instance = ec2_instance(
-    resource_name="metabase_instance",
+    resource_name="metabase-instance",
     instance_type=METABASE_INSTANCE_TYPE,
-    az="eu-west-3a",
+    az=primary_az,
     subnet_id=private_subnet.id,
 )
 
 airbyte_instance = ec2_instance(
-    resource_name="airbyte_instance",
+    resource_name="airbyte-instance",
     instance_type=AIRBYTE_INSTANCE_TYPE,
-    az="eu-west-3a",
+    az=primary_az,
     subnet_id=private_subnet.id,
 )
 

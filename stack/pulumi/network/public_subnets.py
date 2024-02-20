@@ -1,11 +1,12 @@
 import pulumi_aws as aws
 from network.vpc import data_vpc, internet_gateway
 from network.config import ENV
+from network.private_subnets import primary_az
 
 public_subnet = aws.ec2.Subnet(
     "public_subnet",
     vpc_id=data_vpc.id,
-    availability_zone="eu-west-3a",
+    availability_zone=primary_az,
     cidr_block="10.0.1.0/24",
     map_public_ip_on_launch=True,
     tags={"Name": f"{ENV}-data-public-subnet", "env": ENV},

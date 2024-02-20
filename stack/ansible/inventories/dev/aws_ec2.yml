@@ -1,11 +1,12 @@
 plugin: aws_ec2
 aws_profile: "{{ lookup('env', 'AWS_PROFILE') | default('default', true) }}"
-regions:
-  - "{{ lookup('env', 'AWS_REGION') | default('eu-west-3', true) }}"
+# You can set a specific region to look for, it speeds up the inventory creation
+#regions:
+#  - eu-west-3
 filters:
   tag:Name:
-    - metabase_instance
-    - airbyte_instance
+    - metabase-instance
+    - airbyte-instance
   instance-state-name : running
 hostnames:
   - instance-id

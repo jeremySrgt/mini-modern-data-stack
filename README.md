@@ -23,13 +23,14 @@ The stack is made to be deployed on AWS and tries to be as simple as possible wi
 **Here are the prerequisis to run this deployment**
 - an AWS account with AWS CLI configured
 (follow [instruction here](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
-then run `aws configure`)
+then run `aws configure`) the AWS account needs to have a role that allow creating the necessary resources
 - aws ssm plugin to securely manage instances
 (follow [instruction here to install](https://docs.aws.amazon.com/systems-manager/latest/userguide/install-plugin-macos-overview.html)
 and [here to setup your local ssh config accordingly](https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-getting-started-enable-ssh-connections.html#ssh-connections-enable))
 - a Pulumi cloud account in order to manage the state of your infrastructure.
 It's completly free and you can do pretty much everything with the free tier
 ([create an account here](https://app.pulumi.com/signup))
+- the Docker daemon running on your computer
 
 
 ⚠️ Be careful to be on the right AWS profile (if you have several) when executing command.
@@ -67,6 +68,12 @@ Now cd into *stack > pulumi* and login into pulumi cloud with your credentials
 
 ``` bash
 pulumi login
+```
+
+Create a stack named dev (actually, you can name it whatever you want, but you will need to set all the env var below
+as default value will not exist for a different stack name)
+```bash
+pulumi stack init dev
 ```
 
 #### 2.1 Set environment variable
@@ -121,6 +128,7 @@ and
 ```bash
 ansible-playbook --private-key ../../dev-keypair -i inventories/dev/aws_ec2.yml playbooks/metabase_playbook.yml
 ```
+> It takes about 5-8 minutes to configure Airbyte. Metabase should be a bit faster
 
 > Note that, by default, ansible will look for instance in eu-west-3 region,
 if you are deploying on another region set the AWS_REGION env in your terminal session,
@@ -155,6 +163,9 @@ Now you should be able to acces Airbyte on http://localhost:8000/
 
 Do the same for Metabase, but replace the port number with `3000`
 
+
+Learn more about [configuring Airbyte sync](https://airbyte.com/how-to-sync) and [setting up Metabase](https://www.metabase.com/docs/latest/configuring-metabase/setting-up-metabase)
+
 > Don't close the aws ssm session until you are done working on your instances
 
 ## Monthly cost
@@ -184,6 +195,13 @@ It is recommended to set a proper database for Airbyte and Metabase to store the
 You can learn more on how to do for Metabase 
 [here](https://www.metabase.com/docs/latest/installation-and-operation/configuring-application-database)
 and for Airbyte [here](https://docs.airbyte.com/operator-guides/configuring-airbyte-db)
+
+## Destroying the stack 😢
+if, for any reason, you want to destroy the stack and all the related resources
+```bash
+pulumi destroy
+```
+*Remember, you still need to delete the two volume associated with Airbyte and Metabase instance*
 
 ## Enhancements
 Here is a list of enhancement to be made, either to follow engineering best practices or to make the stack more

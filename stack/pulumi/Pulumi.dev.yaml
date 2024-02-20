@@ -7,7 +7,6 @@ config:
     secure: AAABAJwRT/6iaJbnEYK5TxiIDBM0g5DLuHNT69P+iQ/oQrLiBkIvgcSZgNwsBnQ=
   mini-data-stack:env: dev
   mini-data-stack:metabase_instance_type: t3.micro
-  mini-data-stack:private_key_path: dev-keypair
-  mini-data-stack:public_key_path: dev-keypair.pub
+  mini-data-stack:public_key_path: ../../dev-keypair.pub
   mini-data-stack:warehouse_db_name: company_data_warehouse
   mini-data-stack:warehouse_instance_class: db.t3.micro

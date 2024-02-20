@@ -25,8 +25,8 @@ The stack is made to be deployed on AWS and tries to be as simple as possible wi
 (follow [instruction here](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
 then run `aws configure`)
 - aws ssm plugin to securely manage instances
-(follow [instruction here to install](https://docs.aws.amazon.com/systems-manager/latest/userguide/install-plugin-macos-overview.html))
-and [here to setup your local ssh config accordingly](https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-getting-started-enable-ssh-connections.html#ssh-connections-enable)
+(follow [instruction here to install](https://docs.aws.amazon.com/systems-manager/latest/userguide/install-plugin-macos-overview.html)
+and [here to setup your local ssh config accordingly](https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-getting-started-enable-ssh-connections.html#ssh-connections-enable))
 - a Pulumi cloud account in order to manage the state of your infrastructure.
 It's completly free and you can do pretty much everything with the free tier
 ([create an account here](https://app.pulumi.com/signup))

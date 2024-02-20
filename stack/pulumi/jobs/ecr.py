@@ -9,7 +9,7 @@ data_ecr = aws.ecr.Repository(
     image_scanning_configuration=aws.ecr.RepositoryImageScanningConfigurationArgs(
         scan_on_push=True,
     ),
-    image_tag_mutability="MUTABLE", # Should be immutable but for simplicity we will stick to mutable
+    image_tag_mutability="MUTABLE",  # Should be immutable but for simplicity we will stick to mutable
     force_delete=True,
     encryption_configurations=[
         aws.ecr.RepositoryEncryptionConfigurationArgs(encryption_type="KMS")

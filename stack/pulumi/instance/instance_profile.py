@@ -2,7 +2,6 @@ import json
 import pulumi_aws as aws
 from instance.config import ENV
 
-
 ec2_instance_role = aws.iam.Role(
     "ec2-instance-role",
     name=f"{ENV}-ec2-instance-role",

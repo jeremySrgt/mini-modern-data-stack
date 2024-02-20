@@ -9,7 +9,6 @@ from warehouse.config import (
     WAREHOUSE_DB_NAME,
 )
 
-
 data_warehouse = aws.rds.Instance(
     "data_warehouse",
     instance_class=WAREHOUSE_INSTANCE_CLASS,

@@ -9,7 +9,6 @@ cloudwatch_ecs_log_group = aws.cloudwatch.LogGroup(
     tags={"Name": f"{ENV}-ecs-log-group", "env": ENV},
 )
 
-
 cloudwatch_ecs_role = aws.iam.Role(
     "cloudwatch_ecs_role",
     assume_role_policy=json.dumps(
@@ -40,6 +39,7 @@ cloudwatch_managed_policy_attach = aws.iam.RolePolicyAttachment(
     policy_arn="arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceEventsRole",
 )
 
+
 def cloud_watch_pass_role_policy(task_role_arn):
     return (
         json.dumps(
@@ -61,18 +61,18 @@ cloud_watch_policy = aws.iam.Policy(
     "cloudwatch_policy_pass_role",
     description="Cloudwatch passRole for ecs task policy",
     policy=json.dumps(
-            {
-                "Version": "2012-10-17",
-                "Statement": [
-                    {
-                        "Action": ["iam:PassRole"],
-                        "Effect": "Allow",
-                        "Resource": "*",
-                    }
-                ],
-            }
-        ),
-    )
+        {
+            "Version": "2012-10-17",
+            "Statement": [
+                {
+                    "Action": ["iam:PassRole"],
+                    "Effect": "Allow",
+                    "Resource": "*",
+                }
+            ],
+        }
+    ),
+)
 
 # Attach CloudWatch Policy
 cloudwatch_policy_attach = aws.iam.RolePolicyAttachment(

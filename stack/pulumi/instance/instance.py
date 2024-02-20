@@ -7,7 +7,6 @@ from instance.security_groups import (
 from network.vpc import internet_gateway
 from instance.config import ENV, PUBLIC_KEY_PATH
 
-
 public_key = open(PUBLIC_KEY_PATH).read()
 
 data_instance_keypair = aws.ec2.KeyPair(
@@ -18,10 +17,10 @@ data_instance_keypair = aws.ec2.KeyPair(
 
 
 def ec2_instance(
-    resource_name: str,
-    subnet_id: str,
-    instance_type: str,
-    az: str,
+        resource_name: str,
+        subnet_id: str,
+        instance_type: str,
+        az: str,
 ) -> aws.ec2.Instance:
     instance = aws.ec2.Instance(
         resource_name,
@@ -36,7 +35,8 @@ def ec2_instance(
         ],
         key_name=data_instance_keypair.id,
         root_block_device=aws.ec2.InstanceRootBlockDeviceArgs(
-            delete_on_termination=False,  # To keep Metabase and Airbyte data in case you didn't setup a proper persistent storage for them, like a db
+            delete_on_termination=False,
+            # To keep Metabase and Airbyte data in case you didn't setup a proper persistent storage for them, like a db
             encrypted=True,
             volume_size=20,
             volume_type="gp3",

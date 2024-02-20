@@ -3,7 +3,6 @@ from network.vpc import data_vpc
 from network.private_subnets import private_subnet
 from instance.config import ENV
 
-
 allow_443_outbound_to_private_subnet_cidr = aws.ec2.SecurityGroup(
     "allow_443_outbound_to_private_subnet_cidr",
     description="Allow 443 tcp outbound traffic to private subnet cidr",
@@ -19,7 +18,6 @@ aws.vpc.SecurityGroupEgressRule(
     from_port=443,
     to_port=443,
 )
-
 
 allow_outbound_to_anywhere = aws.ec2.SecurityGroup(
     "alllow_outbound_to_anywhere",

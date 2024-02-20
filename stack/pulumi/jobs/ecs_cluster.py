@@ -33,7 +33,6 @@ ecs_task_role = aws.iam.Role(
     tags={"Name": f"{ENV}-ecs-task-role", "env": ENV},
 )
 
-
 ecs_task_policy_attach = aws.iam.RolePolicyAttachment(
     "ecs_task_policy_attach",
     role=ecs_task_role.name,

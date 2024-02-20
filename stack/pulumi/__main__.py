@@ -8,7 +8,6 @@ from network.private_subnets import private_subnet
 from instance.instance import ec2_instance
 from config import METABASE_INSTANCE_TYPE, AIRBYTE_INSTANCE_TYPE
 
-
 metabase_instance = ec2_instance(
     resource_name="metabase_instance",
     instance_type=METABASE_INSTANCE_TYPE,
@@ -28,7 +27,6 @@ create_scheduled_job(
     file_name="hello_jobs.py",
     schedule="cron(30 6 * * ? *)",  # Every day at 6.30 AM UTC
 )
-
 
 pulumi.export("Metabase instance ID", metabase_instance.id)
 pulumi.export("Airbyte instance ID", airbyte_instance.id)

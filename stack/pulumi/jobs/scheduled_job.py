@@ -12,7 +12,7 @@ from instance.security_groups import allow_outbound_to_anywhere
 
 
 def create_ecs_task_definition(
-    name: str, file_name: str, memory: str, cpu: str
+        name: str, file_name: str, memory: str, cpu: str
 ) -> aws.ecs.TaskDefinition:
     task_definition = aws.ecs.TaskDefinition(
         f"{name}",
@@ -63,7 +63,7 @@ def create_ecs_task_definition(
 
 
 def create_cloudwatch_event_rule(
-    name: str, schedule: str, task: aws.ecs.TaskDefinition, state: str
+        name: str, schedule: str, task: aws.ecs.TaskDefinition, state: str
 ) -> Tuple[aws.cloudwatch.EventRule, aws.cloudwatch.EventTarget]:
     cw_event_rule = aws.cloudwatch.EventRule(
         f"{name}_cw_rule",
@@ -96,12 +96,12 @@ def create_cloudwatch_event_rule(
 
 
 def create_scheduled_job(
-    name: str,
-    file_name: str,
-    schedule: str,
-    memory: str = "1024",
-    cpu: str = "512",
-    is_enabled: bool = True,
+        name: str,
+        file_name: str,
+        schedule: str,
+        memory: str = "1024",
+        cpu: str = "512",
+        is_enabled: bool = True,
 ) -> None:
     state = "ENABLED" if is_enabled else "DISABLED"
     task = create_ecs_task_definition(

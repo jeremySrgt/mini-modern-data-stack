@@ -1,6 +1,8 @@
 # Mini Modern Data Stack
 Deploy a complete data stack that can run in production in just a couple of minutes.
 
+*This is still work in progress and not completely finished*
+
 ![alt text](images/high_level_design.jpg "Stack HLD")
 
 ## Infrastructure

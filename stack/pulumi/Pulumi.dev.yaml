@@ -1,10 +1,6 @@
 config:
   aws:region: eu-west-3
   mini-data-stack:airbyte_instance_type: t3.medium
-  mini-data-stack:dwh_master_password:
-    secure: AAABAK9QhUP62arQ/nKsSM/w4RpjqgysX1OP54ImJHUmOdseqo4ttRO2VWhpKc28uFOd
-  mini-data-stack:dwh_master_user:
-    secure: AAABAJwRT/6iaJbnEYK5TxiIDBM0g5DLuHNT69P+iQ/oQrLiBkIvgcSZgNwsBnQ=
   mini-data-stack:env: dev
   mini-data-stack:metabase_instance_type: t3.micro
   mini-data-stack:public_key_path: ../../dev-keypair.pub

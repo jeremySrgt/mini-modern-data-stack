@@ -189,7 +189,7 @@ and all user data. The only storage they have is the volume attached to their in
 Questions and Dashboard with Metabase, and connection with Airbyte they could be lost if the volume is destroyed.
 
 To prevent any unintended deletion of Metabase and Airbyte data, volume associated with their instances are kept even
-if you destroy the Pulumi stack. Delete them from the console if your destroy the stack through Pulumi
+if you destroy the Pulumi stack. Delete them from the aws console if you destroy the stack through Pulumi
 
 It is recommended to set a proper database for Airbyte and Metabase to store their configuration and data.
 You can learn more on how to do for Metabase 

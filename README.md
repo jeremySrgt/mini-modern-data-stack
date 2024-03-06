@@ -30,6 +30,7 @@ and [here to setup your local ssh config accordingly](https://docs.aws.amazon.co
 - a Pulumi cloud account in order to manage the state of your infrastructure.
 It's completly free and you can do pretty much everything with the free tier
 ([create an account here](https://app.pulumi.com/signup))
+- Pulumi CLI installed or your machine ([install the CLI](https://www.pulumi.com/docs/install/))
 - the Docker daemon running on your computer
 
 
@@ -79,16 +80,17 @@ pulumi stack init dev
 #### 2.1 Set environment variable
 You now need to set a couple of environment variable and secrets. Here is the list :
 
-| Config name               | Required |     Default value      |                                  Description |
-| --------------------------|:--------:|:----------------------:|---------------------------------------------:|
-| env                       | false    |          dev           |         name of the env you are deploying to |
-| public_key_path           | true     | ../../dev-keypair.pub  |   path to your public key (ending with .pub) |
-| airbyte_instance_type     | false    |       t3.medium        |                     type of Airbyte instance |
-| metabase_instance_type    | false    |        t3.small        |                    type of Metabase instance |
-| warehouse_instance_class  | false    |      db.t3.micro       | type of RDS instance class for the warehouse |
-| warehouse_db_name         | false    | company_data_warehouse |                 name of the default database |
-| dwh_master_user*          | true     |                        |                  master user of the database |
-| dwh_master_password*      | true     |                        |       master user's password of the database |
+| Config name              | Required |     Default value      |                                  Description |
+|--------------------------|:--------:|:----------------------:|---------------------------------------------:|
+| region                   |   true   |       eu-west-3        |  the region where the stack will be deployed |
+| env                      |  false   |          dev           |         name of the env you are deploying to |
+| public_key_path          |  false   | ../../dev-keypair.pub  |   path to your public key (ending with .pub) |
+| airbyte_instance_type    |  false   |       t3.medium        |                     type of Airbyte instance |
+| metabase_instance_type   |  false   |        t3.small        |                    type of Metabase instance |
+| warehouse_instance_class |  false   |      db.t3.micro       | type of RDS instance class for the warehouse |
+| warehouse_db_name        |  false   | company_data_warehouse |                 name of the default database |
+| dwh_master_user*         |   true   |                        |                  master user of the database |
+| dwh_master_password*     |   true   |                        |       master user's password of the database |
 
 To set a config variable :
 ```bash

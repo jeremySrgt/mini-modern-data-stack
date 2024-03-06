@@ -1,8 +1,2 @@
 config:
   aws:region: eu-west-3
-  mini-data-stack:airbyte_instance_type: t3.medium
-  mini-data-stack:env: dev
-  mini-data-stack:metabase_instance_type: t3.micro
-  mini-data-stack:public_key_path: ../../dev-keypair.pub
-  mini-data-stack:warehouse_db_name: company_data_warehouse
-  mini-data-stack:warehouse_instance_class: db.t3.micro

@@ -1,7 +1,7 @@
 import pulumi_aws as aws
 from network.vpc import data_vpc, internet_gateway
 from network.config import ENV
-from network.private_subnets import primary_az
+from network.az import primary_az
 
 public_subnet = aws.ec2.Subnet(
     "public_subnet",

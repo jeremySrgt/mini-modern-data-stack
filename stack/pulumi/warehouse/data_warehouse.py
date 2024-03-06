@@ -1,7 +1,7 @@
 import pulumi_aws as aws
 from warehouse.subnet_groups import warehouse_subnet_group
 from warehouse.security_groups import allow_5432_inbound_from_private_subnet
-from network.private_subnets import primary_az
+from network.az import primary_az
 from warehouse.config import (
     ENV,
     DATA_WAREHOUSE_MASTER_USER,

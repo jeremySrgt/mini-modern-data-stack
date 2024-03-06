@@ -4,7 +4,8 @@ import jobs.ecr as ecr
 import jobs.ecs_cluster as ecs_cluster
 import network.vpc_endpoints
 from jobs.scheduled_job import create_scheduled_job
-from network.private_subnets import private_subnet, primary_az
+from network.private_subnets import private_subnet
+from network.az import primary_az
 from instance.instance import ec2_instance
 from config import METABASE_INSTANCE_TYPE, AIRBYTE_INSTANCE_TYPE
 

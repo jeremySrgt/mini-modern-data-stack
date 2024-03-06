@@ -1,11 +1,8 @@
 import pulumi_aws as aws
 from network.vpc import data_vpc
 from network.nat_gateway import nat_gateway
+from network.az import primary_az, secondary_az
 from network.config import ENV
-
-available_az = aws.get_availability_zones(state="available")
-primary_az = available_az.names[0]
-secondary_az = available_az.names[1]
 
 private_subnet = aws.ec2.Subnet(
     "private_subnet",
